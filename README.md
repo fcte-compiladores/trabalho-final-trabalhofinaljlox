@@ -87,6 +87,27 @@ node index.js
 node index.js exemplos/hello.lox
 ```
 
+## 🧪 Testes Automatizados
+
+Este projeto inclui uma suíte de testes unitários para garantir a estabilidade e correção do interpretador. Os testes estão organizados por módulo na pasta `tests/` e cobrem:
+
+- `interpreter.test.js`: testes de avaliação da AST
+- `expr.test.js`: testes de construção e uso de expressões
+- `scanner.test.js`: testes de análise léxica (tokens)
+- `parser.test.js`: testes de parsing e AST
+- `runtime-errors.test.js`: testes de erros esperados no tempo de execução
+
+### ▶️ Como rodar os testes
+
+Após instalar as dependências com `npm install`, execute:
+
+```bash
+npm test
+```
+
+Isso irá rodar o arquivo `tests/all.test.js`, que agrupa todos os testes.  
+Todos os testes usam apenas `console.assert()` com Node.js puro, sem necessidade de frameworks externos.
+
 ## 💡 Exemplos
 
 Arquivos na pasta `exemplos/` com variados níveis de dificuldade:

@@ -1,5 +1,5 @@
 import { TokenType } from './TokenType.js';
-import { Lox } from './index.js';
+
 
 // Erro personalizado para erros que acontecem durante a execução.
 class RuntimeError extends Error {
@@ -16,7 +16,7 @@ export class Interpreter {
       const value = this.evaluate(expression);
       console.log(this.stringify(value));
     } catch (error) {
-      Lox.runtimeError(error);
+      console.error(error.message);
     }
   }
 
