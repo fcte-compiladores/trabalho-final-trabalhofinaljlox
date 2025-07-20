@@ -143,7 +143,6 @@ jlox/
 
 ## 🐞 Bugs e Limitações
 
-- Não há testes automatizados (mas podem ser adicionados com Jest)
-- Não há suporte a orientação a objetos (classes)
+
 - Falta tratamento de erros mais detalhado (linha/coluna)
 - Recursos como arrays, funções anônimas e objetos ainda não estão implementados
