@@ -1,7 +1,5 @@
 import { TokenType } from './TokenType.js';
 
-
-// Erro personalizado para erros que acontecem durante a execução.
 class RuntimeError extends Error {
   constructor(token, message) {
     super(message);
@@ -24,8 +22,6 @@ export class Interpreter {
     return expr.accept(this);
   }
 
-  // --- MÉTODOS DO VISITOR ---
-
   visitLiteralExpr(expr) {
     return expr.value;
   }
@@ -45,7 +41,6 @@ export class Interpreter {
         return !this.isTruthy(right);
     }
 
-    // Inalcançável.
     return null;
   }
   
@@ -54,7 +49,6 @@ export class Interpreter {
     const right = this.evaluate(expr.right);
 
     switch (expr.operator.type) {
-      // Comparações
       case TokenType.GREATER:
         this.checkNumberOperands(expr.operator, left, right);
         return Number(left) > Number(right);
@@ -67,10 +61,8 @@ export class Interpreter {
       case TokenType.LESS_EQUAL:
         this.checkNumberOperands(expr.operator, left, right);
         return Number(left) <= Number(right);
-      // Igualdade
       case TokenType.BANG_EQUAL: return !this.isEqual(left, right);
       case TokenType.EQUAL_EQUAL: return this.isEqual(left, right);
-      // Aritmética
       case TokenType.MINUS:
         this.checkNumberOperands(expr.operator, left, right);
         return Number(left) - Number(right);
@@ -90,9 +82,39 @@ export class Interpreter {
         return Number(left) * Number(right);
     }
 
-    // Inalcançável.
     return null;
   }
+
+visitPostfixExpr(expr) {
+    const left = this.evaluate(expr.left);
+
+    switch (expr.operator.type) {
+      case TokenType.BANG:
+        this.checkNumberOperand(expr.operator, left);
+
+        // Validações para fatorial
+        if (!Number.isInteger(left)) {
+          throw new RuntimeError(expr.operator, "Operand for factorial must be an integer.");
+        }
+        if (left < 0) {
+          throw new RuntimeError(expr.operator, "Operand for factorial must be a non-negative number.");
+        }
+
+        const factorial = (n) => {
+          if (n === 0) return 1;
+          let result = 1;
+          for (let i = 2; i <= n; i++) {
+            result *= i;
+          }
+          return result;
+        };
+
+        return factorial(left);
+    }
+
+    return null;
+}
+
   
   // --- MÉTODOS DE AJUDA ---
 

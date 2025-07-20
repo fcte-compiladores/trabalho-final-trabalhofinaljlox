@@ -4,8 +4,7 @@ import { Scanner } from './Scanner.js';
 import { Parser } from './Parser.js';
 import { Interpreter } from './Interpreter.js';
 
-// Classe principal que gerencia o fluxo de execução.
-// Usamos variáveis estáticas para evitar passar instâncias para todo lado.
+
 export class Lox {
   static hadError = false;
   static hadRuntimeError = false;
@@ -40,7 +39,7 @@ export class Lox {
 
     rl.on('line', (line) => {
       this.run(line);
-      this.hadError = false; // Não mate a sessão interativa por um erro.
+      this.hadError = false;
       rl.prompt();
     });
   }
@@ -51,12 +50,7 @@ export class Lox {
     const parser = new Parser(tokens);
     const expression = parser.parse();
 
-    // Pare se houver um erro de sintaxe.
     if (this.hadError) return;
-    
-    // Agora, para depuração, vamos imprimir a AST.
-    // Você pode criar um arquivo AstPrinter.js para isso se quiser.
-    // console.log(new AstPrinter().print(expression));
 
     this.interpreter.interpret(expression);
   }
@@ -85,5 +79,4 @@ export class Lox {
   }
 }
 
-// Inicia o programa, passando os argumentos da linha de comando.
 Lox.main(process.argv.slice(2));

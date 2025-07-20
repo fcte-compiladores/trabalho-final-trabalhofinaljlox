@@ -16,6 +16,18 @@ export class Expr {
       return visitor.visitBinaryExpr(this);
     }
   }
+
+  export class Postfix extends Expr {
+  constructor(left, operator) {
+    super();
+    this.left = left;
+    this.operator = operator;
+  }
+
+  accept(visitor) {
+    return visitor.visitPostfixExpr(this);
+  }
+}
   
   export class Grouping extends Expr {
     constructor(expression) {

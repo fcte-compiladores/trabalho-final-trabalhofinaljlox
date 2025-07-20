@@ -1,5 +1,5 @@
 import { TokenType } from './TokenType.js';
-import { Binary, Unary, Literal, Grouping } from './Expr.js';
+import { Binary, Unary, Literal, Grouping, Postfix } from './Expr.js';
 import { Lox } from './index.js';
 
 class ParseError extends Error {}
@@ -9,9 +9,7 @@ export class Parser {
     this.tokens = tokens;
     this.current = 0;
   }
-  
-  // O método principal que inicia o parsing.
-  // Por enquanto, ele espera uma única expressão.
+
   parse() {
     try {
       return this.expression();
@@ -65,13 +63,24 @@ export class Parser {
   }
 
   unary() {
-    if (this.match(TokenType.BANG, TokenType.MINUS)) {
-      const operator = this.previous();
-      const right = this.unary();
-      return new Unary(operator, right);
-    }
-    return this.primary();
+  if (this.match(TokenType.BANG, TokenType.MINUS)) {
+    const operator = this.previous();
+    const right = this.unary();
+    return new Unary(operator, right);
   }
+  return this.postfix();
+}
+
+postfix() {
+  let expr = this.primary();
+
+  while (this.match(TokenType.BANG)) {
+    const operator = this.previous();
+    expr = new Postfix(expr, operator);
+  }
+
+  return expr;
+}
 
   primary() {
     if (this.match(TokenType.FALSE)) return new Literal(false);
@@ -90,8 +99,7 @@ export class Parser {
     
     throw this.error(this.peek(), 'Expect expression.');
   }
-  
-  // Métodos de ajuda
+
   match(...types) {
     for (const type of types) {
       if (this.check(type)) {
