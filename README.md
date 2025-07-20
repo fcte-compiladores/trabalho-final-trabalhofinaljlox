@@ -1,80 +1,128 @@
-# Trabalho Final
+# Interpretador jLox: Uma Implementação da Linguagem Lox em JavaScript
 
-## Escopo e organização
+## 👥 Integrantes
 
-O trabalho é de tema livre dentro do escopo da disciplina de compiladores e
-consiste no desenvolvimento de alguma aplicação na área da disciplina (um
-interpretador para uma linguagem simples, compilador, analisadores de código,
-etc.)
+| Nome                     | Matrícula  | Turma     |
+|--------------------------|------------|-----------|
+| Eric Camargo da Silva    | 202016168  | 16 horas  |
+| Ingrid Alves Rocha       | 202045348  | 18 horas  |
+| João Pedro Silva Sousa   | 222006258  | 18 horas  |
 
-O trabalho pode ser feito em grupos de até 4 pessoas.
+## 📘 Introdução
 
-## Estrutura
+Este projeto é uma implementação de um interpretador para a linguagem de programação **Lox**, escrito inteiramente em **JavaScript** e projetado para rodar no ambiente **Node.js**. O desenvolvimento foi guiado pelos princípios apresentados no livro *Crafting Interpreters* de Robert Nystrom, seguindo a implementação `jlox`.
 
-Os trabalhos devem ser entregues na atividade própria no [github-classrrom](...).
-Cada repositório deve ter uma estrutura parecida com a delineada abaixo:
+O objetivo é construir um interpretador funcional que abrange desde a análise léxica do código-fonte até a execução de expressões e declarações. O interpretador é um *tree-walking interpreter*, que constrói uma **AST (Árvore de Sintaxe Abstrata)** e caminha por ela para avaliar o programa.
 
-* *README:* o arquivo README.md na base do repositório deve descrever os
-  detalhes da implementação do código. O README deve ter algumas seções 
-  obrigatórias:
-  - *Título*: nome do projeto
-  - *Integrantes*: lista com os nomes, matrículas e turma de cada integrante.
-  - *Introdução*: deve detalhar o que o projeto implementou, quais foram as
-    estratégias e algoritmos relevantes. Se o projeto implementa uma linguagem
-    não-comum ou um subconjunto de uma linguagem comum, deve conter alguns
-    exemplos de comandos nesta linguagem, descrendo a sua sintaxe e semântica,
-    quando necessário.
- - *Instalação*: deve detalhar os passos para instalar as dependências e
-    rodar o código do projeto. Pode ser algo simples como *"Rode
-    uv run lox hello.lox para executar o interpretador."*, se a linguagem de
-    implementação permitir este tipo de facilidade.
+### Funcionalidades já implementadas:
 
-    Você pode usar gerenciadores de pacotes específicos de linguagens populares
-    como uv, npm, cargo, etc, containers Docker/Podman, ou .nix.
-  - *Exemplos*: o projeto deve conter uma pasta "exemplos" com alguns arquivos
-    na linguagem de programação implementada. Deve conter exemplos com graus
-    variáveis de complexidade. Algo como: hello world, fibonacci, função
-    recursiva, alguma estrutura de dados e para finalizar um algoritmo um pouco
-    mais elaborado como ordenamento de listas, busca binária, etc.
-    
-    Note que isto é apenas um guia da ordem de dificuldade dos problemas.
-    Algumas linguagens sequer permitem a implementação de alguns dos exemplos
-    acima.
-- *Referências*: descreva as referências que você utilizou para a
-    implementação da linguagem. Faça uma breve descrição do papel de cada
-    referência ou como ela foi usada no projeto. Caso você tenha usado algum 
-    código existente como referência, descreva as suas contribuições originais
-    para o projeto.
-  - *Estrutura do código*: faça uma descrição da estrutura geral do código
-    discutindo os módulos, classes, estruturas de dados ou funções principais. 
-    Explicite onde as etapas tradicionais de compilação (análise léxica, 
-    sintática, semântica, etc) são realizadas, quando relevante.
-  - *Bugs/Limitações/problemas conhecidos*: discuta as limitações do seu
-    projeto e problemas conhecidos e coisas que poderiam ser feitas para
-    melhorá-lo no futuro. Note: considere apenas melhorias incrementais e não
-    melhorias grandes como: "reimplementar tudo em Rust".
-* *Código:* O codigo fonte deve estar presente no repositório principal junto com
-  a declaração das suas dependências. Cada linguagem possui um mecanismo
-  específico para isso, mas seria algo como o arquivo pyproject.toml em Python
-  ou package.json no caso de Javascript.
+- Análise e execução de expressões aritméticas com precedência de operadores
+- Avaliação de expressões lógicas e comparações
+- Manipulação de tipos primitivos: números, strings, booleanos e `nil`
+- Modo interativo (REPL) e execução de arquivos `.lox`
+- Relatórios de erro de sintaxe e tempo de execução
 
-## Critérios
+## 🧠 Estratégias e Arquitetura
 
-Cada trabalho começa com 100% e pode receber penalizações ou bônus de acordo com
-os critérios abaixo:
-Cada trabalho começa com 100% e pode receber penalizações ou bônus de acordo com
-os critérios abaixo:
+### 🔹 Analisador Léxico (`Scanner.js`)
+Transforma o código em uma sequência de *tokens* reconhecendo números, operadores, palavras-chave etc.
 
-- Ausência do README: -50%
-- Instruções de instalação não funcionam: até -20%
-- Referências não atribuídas ou falta de referâncias: -10%
-- Código confuso ou mal organizado: até -15%
-- Falta de clareza em apresentar as técnicas e etapas de compilação: -15%
-- Bugs e limitações sérias na implementação: até -25%
-- Escopo reduzido, ou implementação insuficiente: até 25%
-- Uso de código não atribuído/plágio: até -100%
-- Repositório bem estruturado e organizado: até 10%
-- Linguagem com conceitos originais/interessantes: até +15%
-- Testes unitários: até +15%, dependendo da cobertura
+### 🔹 Analisador Sintático (`Parser.js`)
+Implementa um *Parser de Descida Recursiva*, que transforma os tokens em uma AST. Tem suporte a recuperação de erro com sincronização.
 
-Após aplicar todos os bônus, a nota é truncada no intervalo 0-100%.
+### 🔹 Padrão Visitor (`Expr.js`, `Interpreter.js`)
+Permite aplicar operações à AST desacoplando dados e comportamento.
+
+### 🔹 Avaliador (`Interpreter.js`)
+Percorre recursivamente a AST para avaliar expressões e executar comandos. Usa pós-ordem para calcular resultados.
+
+## 💡 Sintaxe da Linguagem
+
+### Expressões Aritméticas
+
+```lox
+(100 - 20) / (2 * 5) + 3 // Resultado: 11
+```
+
+### Expressões Lógicas e Comparações
+
+```lox
+100 > 20    // true
+!false      // true
+!0          // false (0 é truthy)
+```
+
+### Tipos de Dados
+
+- `Number`
+- `String`
+- `Boolean`
+- `nil`
+
+```lox
+"O futuro da computação é " + "brilhante!"
+```
+
+## 🛠️ Instalação
+
+Pré-requisitos: **Node.js 18.x ou superior**
+
+```bash
+git clone <REPOSITORIO_GITHUB>
+cd jlox
+npm install
+```
+
+## ▶️ Execução
+
+### Modo REPL interativo:
+
+```bash
+node index.js
+```
+
+### Executando arquivo `.lox`:
+
+```bash
+node index.js exemplos/hello.lox
+```
+
+## 💡 Exemplos
+
+Arquivos na pasta `exemplos/` com variados níveis de dificuldade:
+
+- `hello.lox`: hello world
+- `fibonacci.lox`: recursividade
+- `ordenar.lox`: bubble sort
+- `estrutura.lox`: controle de fluxo e variáveis
+- `busca-binaria.lox`: exemplo de busca
+
+## 📁 Estrutura do Código
+
+```
+jlox/
+├── lox.js           # Ponto de entrada do interpretador
+├── index.js         # Executável principal para REPL ou arquivos
+├── Scanner.js       # Analisador léxico
+├── TokenType.js     # Enum dos tokens
+├── Token.js         # Classe dos tokens
+├── Parser.js        # Analisador sintático (gera AST)
+├── Expr.js          # Definições da AST
+├── Interpreter.js   # Avaliação da AST
+├── package.json     # Dependências (Node.js)
+└── exemplos/        # Códigos exemplo em Lox
+```
+
+## 📚 Referências
+
+- **Crafting Interpreters** - Livro base com explicações da arquitetura e semântica
+- **Node.js Docs** - Para execução no ambiente JavaScript
+- **MDN Web Docs** - Consulta sobre sintaxe JavaScript moderna
+- **ECMAScript Spec** - Inspiração geral
+
+## 🐞 Bugs e Limitações
+
+- Não há testes automatizados (mas podem ser adicionados com Jest)
+- Não há suporte a orientação a objetos (classes)
+- Falta tratamento de erros mais detalhado (linha/coluna)
+- Recursos como arrays, funções anônimas e objetos ainda não estão implementados
