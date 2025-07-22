@@ -42,7 +42,6 @@ Percorre recursivamente a AST para avaliar expressões e executar comandos. Usa 
 
 ```lox
 (100 - 20) / (2 * 5) + 3 // Resultado: 11
-5! // Resultado: 120
 ```
 
 ### Expressões Lógicas e Comparações
